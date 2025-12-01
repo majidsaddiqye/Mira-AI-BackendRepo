@@ -3,19 +3,21 @@ const cookie = require("cookie");
 const JWT = require("jsonwebtoken");
 const userModel = require("../models/user.model");
 const generateResponse = require("../services/ai.service");
-const messageModel = require('../models/message.model')
+const messageModel = require("../models/message.model");
 
 function initSocketServer(httpServer) {
   const io = new Server(httpServer, {});
 
   //Socket Middleware
   io.use(async (socket, next) => {
+    //Add Cookie Token in Headers
     const cookies = cookie.parse(socket.handshake.headers?.cookie || "");
 
     if (!cookies) {
-      next(new Error("Authentication failed for server with invalid cookies"));
+      next(next(new Error("Token missing")));
     }
 
+    //JWT Token Verifying
     try {
       const decoded = JWT.verify(cookies.token, process.env.JWT_SECRET);
       const user = await userModel.findById(decoded.id);
@@ -29,10 +31,37 @@ function initSocketServer(httpServer) {
   // Connect to the server and AI Integration
   io.on("connection", (socket) => {
     socket.on("ai-message", async (messagePayload) => {
-      const response = await generateResponse(messagePayload.content);
+      //Save User message in Database
+      await messageModel.create({
+        chat: messagePayload.chat,
+        user: socket.user._id,
+        content: messagePayload.content,
+        role: "user",
+      });
 
+      //ChatHistory Read
+      const chatHistory = await messageModel.find({
+        chat: messagePayload.chat,
+      });
+
+      const formattedHistory = chatHistory.map((item) => ({
+        role: item.role,
+        parts: [{ text: item.content }],
+      }));
+
+      const response = await generateResponse(formattedHistory);
+
+      //Save AI message in Database
+      await messageModel.create({
+        chat: messagePayload.chat,
+        user: socket.user._id,
+        content: response,
+        role: "model",
+      });
+
+      //AI Response Code
       socket.emit("ai-response", {
-        cntent: response,
+        content: response,
         chat: messagePayload.chat,
       });
     });
