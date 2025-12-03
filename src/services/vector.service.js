@@ -8,13 +8,14 @@ const pc = new Pinecone({ apiKey: process.env.PINECON_API_KEY });
 const indexName = pc.Index("chatgpt-project");
 
 async function createMemory({ vector, metadata, messageId }) {
-  await indexName.upsert([
+  const response = await indexName.upsert([
     {
       id: messageId,
       values: vector,
       metadata,
     },
   ]);
+  return response; 
 }
 
 async function querMemory({ queryVector, limit = 5, metadata }) {

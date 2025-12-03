@@ -44,15 +44,26 @@ function initSocketServer(httpServer) {
 
       //Convert input into vector and saved into Pineconn
       const vectors = await generateVector(messagePayload.content);
+
+      //Search relevant Data into Vector DB
+      const memory = await querMemory({
+        queryVector: vectors,
+        limit: 3,
+        metadata: {},
+      });
+
+      // Saved into vector DB
       await createMemory({
         vector: vectors,
         messageId: message._id,
         metadata: {
           chat: messagePayload.chat,
           user: socket.user._id,
-          text: messagePayload.content
+          text: messagePayload.content,
         },
       });
+
+      console.log(memory);
 
       //Improve chat history handling and optimize short-term memory
 
@@ -90,7 +101,7 @@ function initSocketServer(httpServer) {
         metadata: {
           chat: messagePayload.chat,
           user: socket.user._id,
-          text: response
+          text: response,
         },
       });
 
