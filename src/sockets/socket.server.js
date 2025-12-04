@@ -49,7 +49,9 @@ function initSocketServer(httpServer) {
       const memory = await querMemory({
         queryVector: vectors,
         limit: 3,
-        metadata: {},
+        metadata: {
+          user: socket.user._id,
+        },
       });
 
       // Saved into vector DB
@@ -63,8 +65,6 @@ function initSocketServer(httpServer) {
         },
       });
 
-      console.log(memory);
-
       //Improve chat history handling and optimize short-term memory
 
       const chatHistory = (
@@ -77,13 +77,26 @@ function initSocketServer(httpServer) {
           .lean()
       ).reverse();
 
-      // Formated chatHistory of GenAi Docs
-      const formattedHistory = chatHistory.map((item) => ({
+      // STM chatHistory of GenAi Docs
+      const STM = chatHistory.map((item) => ({
         role: item.role,
         parts: [{ text: item.content }],
       }));
+      // LTM Chat History
+      const LTM = [
+        {
+          role: "user",
+          parts: [
+            {
+              text: `Tyese are Some Previous messages from the chat, use them to generate a response ${memory
+                .map((item) => item.metadata.text)
+                .join("\n")}`,
+            },
+          ],
+        },
+      ];
 
-      const response = await generateResponse(formattedHistory);
+      const response = await generateResponse([...LTM, ...STM]);
 
       //Save AI message in Database
       const responseMessage = await messageModel.create({
