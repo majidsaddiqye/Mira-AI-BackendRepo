@@ -27,23 +27,27 @@ This backend repository provides a complete solution for building an AI-powered 
 ## 🛠️ Tech Stack
 
 ### Core Technologies
+
 - **Node.js** - JavaScript runtime environment
 - **Express.js** (v5.1.0) - Web application framework
 - **MongoDB** with **Mongoose** (v9.0.0) - Database and ODM
 - **Socket.io** (v4.8.1) - Real-time bidirectional communication
 
 ### AI & ML
+
 - **Google Gemini AI** (@google/genai v1.30.0) - AI model for generating responses
   - Model: `gemini-2.0-flash` for chat responses
   - Model: `gemini-embedding-001` for vector embeddings
 - **Pinecone** (@pinecone-database/pinecone v6.1.3) - Vector database for semantic search and memory
 
 ### Security & Authentication
+
 - **JWT** (jsonwebtoken v9.0.2) - Token-based authentication
 - **bcrypt** (v6.0.0) - Password hashing
 - **cookie-parser** (v1.4.7) - Cookie management
 
 ### Utilities
+
 - **dotenv** (v17.2.3) - Environment variable management
 - **nodemon** (v3.1.11) - Development server with auto-reload
 
@@ -119,12 +123,14 @@ PINECON_API_KEY=your_pinecone_api_key_here
 ### How to Get API Keys:
 
 1. **Google Gemini API Key:**
+
    - Visit [Google AI Studio](https://makersuite.google.com/app/apikey)
    - Sign in with your Google account
    - Create a new API key
    - Copy and paste it in `.env`
 
 2. **Pinecone API Key:**
+
    - Visit [Pinecone](https://www.pinecone.io/)
    - Sign up for a free account
    - Go to API Keys section
@@ -169,6 +175,7 @@ Server is Listening on port 5000
 ### Authentication Routes (`/api/auth`)
 
 #### Register User
+
 ```http
 POST /api/auth/register
 Content-Type: application/json
@@ -184,6 +191,7 @@ Content-Type: application/json
 ```
 
 #### Login User
+
 ```http
 POST /api/auth/login
 Content-Type: application/json
@@ -199,6 +207,7 @@ Content-Type: application/json
 ### Chat Routes (`/api/chat`)
 
 #### Create Chat
+
 ```http
 POST /api/chat
 Authorization: Bearer <token>
@@ -212,28 +221,31 @@ Content-Type: application/json
 ### WebSocket Events
 
 #### Connect to Socket
+
 ```javascript
-const socket = io('http://localhost:5000', {
+const socket = io("http://localhost:5000", {
   withCredentials: true,
   extraHeaders: {
-    "cookie": "token=your_jwt_token_here"
-  }
+    cookie: "token=your_jwt_token_here",
+  },
 });
 ```
 
 #### Send Message to AI
+
 ```javascript
-socket.emit('ai-message', {
-  chat: 'chat_id_here',
-  content: 'Your message here'
+socket.emit("ai-message", {
+  chat: "chat_id_here",
+  content: "Your message here",
 });
 ```
 
 #### Receive AI Response
+
 ```javascript
-socket.on('ai-response', (data) => {
-  console.log('AI Response:', data.content);
-  console.log('Chat ID:', data.chat);
+socket.on("ai-response", (data) => {
+  console.log("AI Response:", data.content);
+  console.log("Chat ID:", data.chat);
 });
 ```
 
@@ -284,75 +296,89 @@ ChatGPT-BackendRepo/
 ## 🎮 What You Can Do
 
 ### 1. **Build a Chat Application**
-   - Create a frontend (React, Vue, Angular, etc.) that connects to this backend
-   - Implement user registration and login
-   - Build a chat interface that uses Socket.io for real-time messaging
+
+- Create a frontend (React, Vue, Angular, etc.) that connects to this backend
+- Implement user registration and login
+- Build a chat interface that uses Socket.io for real-time messaging
 
 ### 2. **AI-Powered Conversations**
-   - Users can have natural conversations with the AI
-   - The AI remembers context from previous messages
-   - Responses are formatted with HTML support
+
+- Users can have natural conversations with the AI
+- The AI remembers context from previous messages
+- Responses are formatted with HTML support
 
 ### 3. **Chat Management**
-   - Create multiple chat sessions
-   - Each chat maintains its own history
-   - Messages are stored in MongoDB for persistence
+
+- Create multiple chat sessions
+- Each chat maintains its own history
+- Messages are stored in MongoDB for persistence
 
 ### 4. **Memory & Context**
-   - Short-term memory (STM): Last 20 messages in current chat
-   - Long-term memory (LTM): Relevant past conversations retrieved via vector search
-   - AI uses both to provide contextually relevant responses
+
+- Short-term memory (STM): Last 20 messages in current chat
+- Long-term memory (LTM): Relevant past conversations retrieved via vector search
+- AI uses both to provide contextually relevant responses
 
 ### 5. **Vector-Based Search**
-   - Messages are converted to embeddings
-   - Stored in Pinecone for semantic search
-   - Enables finding relevant past conversations
+
+- Messages are converted to embeddings
+- Stored in Pinecone for semantic search
+- Enables finding relevant past conversations
 
 ### 6. **Real-time Communication**
-   - Instant message delivery via WebSocket
-   - No need to poll the server
-   - Efficient bidirectional communication
+
+- Instant message delivery via WebSocket
+- No need to poll the server
+- Efficient bidirectional communication
 
 ### 7. **Secure Authentication**
-   - JWT-based authentication
-   - Password hashing with bcrypt
-   - HTTP-only cookies for token storage
+
+- JWT-based authentication
+- Password hashing with bcrypt
+- HTTP-only cookies for token storage
 
 ---
 
 ## 🔧 Technologies Used in Detail
 
 ### **Express.js**
+
 - Fast, unopinionated web framework for Node.js
 - Handles HTTP requests and routing
 - Middleware support for authentication and parsing
 
 ### **MongoDB & Mongoose**
+
 - NoSQL database for flexible data storage
 - Mongoose provides schema validation and modeling
 - Stores users, chats, and messages
 
 ### **Socket.io**
+
 - Enables real-time, bidirectional communication
 - WebSocket protocol for instant messaging
 - Supports authentication via middleware
 
 ### **Google Gemini AI**
+
 - **gemini-2.0-flash**: Fast, efficient model for chat responses
 - **gemini-embedding-001**: Generates 768-dimensional vectors
 - Custom system instructions for "Mira AI" personality
 
 ### **Pinecone**
+
 - Managed vector database
 - Stores message embeddings for semantic search
 - Enables finding similar past conversations
 
 ### **JWT (JSON Web Tokens)**
+
 - Stateless authentication
 - Secure token-based sessions
 - Stored in HTTP-only cookies
 
 ### **bcrypt**
+
 - One-way password hashing
 - Salt rounds for security
 - Prevents password exposure
@@ -362,26 +388,31 @@ ChatGPT-BackendRepo/
 ## 🐛 Troubleshooting
 
 ### Server won't start
+
 - Check if MongoDB is running
 - Verify all environment variables are set in `.env`
 - Ensure port 5000 (or your specified port) is not in use
 
 ### Database connection error
+
 - Verify `MONGO_URL` in `.env` is correct
 - Check MongoDB service is running
 - For MongoDB Atlas, ensure IP whitelist includes your IP
 
 ### AI not responding
+
 - Verify `GOOGLE_GENAI_API_KEY` is valid
 - Check API quota/limits
 - Ensure internet connection is active
 
 ### Vector database errors
+
 - Verify `PINECON_API_KEY` is correct
 - Check Pinecone index name matches: `chatgpt-project`
 - Ensure Pinecone index exists and is active
 
 ### Authentication issues
+
 - Verify `JWT_SECRET` is set
 - Check token expiration
 - Ensure cookies are being sent with requests
@@ -413,13 +444,14 @@ ISC License
 ## 👤 Author
 
 **Majid Saddiqye**
+
 - GitHub: [@majidsaddiqye](https://github.com/majidsaddiqye)
 
 ---
 
 ## 🔗 Links
 
-- [Repository](https://github.com/majidsaddiqye/ChatGPT-BackendRepo)
+- [Repository](https://github.com/majidsaddiqye/Mira-AI-BackendRepo.git)
 - [Google AI Studio](https://makersuite.google.com/app/apikey)
 - [Pinecone](https://www.pinecone.io/)
 - [MongoDB Atlas](https://www.mongodb.com/cloud/atlas)
@@ -427,4 +459,3 @@ ISC License
 ---
 
 **Happy Coding! 🚀**
-
