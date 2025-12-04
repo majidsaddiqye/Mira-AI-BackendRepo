@@ -1,4 +1,4 @@
-# 🤖 ChatGPT Backend Repository
+# 🤖 MIRA AI Backend Repository
 
 A powerful, real-time AI chat backend built with Node.js, featuring Google Gemini AI integration, vector-based memory management, and WebSocket support for seamless conversational experiences.
 
