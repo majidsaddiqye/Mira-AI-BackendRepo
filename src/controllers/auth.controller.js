@@ -28,11 +28,11 @@ async function registerUser(req, res) {
       password: hashPassword,
     });
 
-    const token = JWT.sign({ id: user._id }, process.env.JWT_SECRET, {
-      expiresIn: "7d",
-    });
+    // const token = JWT.sign({ id: user._id }, process.env.JWT_SECRET, {
+    //   expiresIn: "7d",
+    // });
 
-    res.cookie("token", token);
+    // res.cookie("token", token);
 
     return res.status(201).send({
       message: "User Registered successfully",
@@ -82,4 +82,17 @@ async function LoginUser(req, res) {
   });
 }
 
-module.exports = { registerUser, LoginUser };
+//Logout User Controller
+async function logoutUser(req,res){
+   res.clearCookie("token", {
+    httpOnly: true,
+    secure: true,
+    sameSite: "none",
+  });
+
+  return res.status(200).json({
+    message: "Logged out successfully",
+  });
+}
+
+module.exports = { registerUser, LoginUser, logoutUser };
